@@ -5,10 +5,11 @@
 2. 提供一个专门的平台，收录高校新闻数据。
 3. 通过高校新闻分析高校动态，以及热点分析。
 
-## 抓取地址
+## 数据来源
 
 1. [中国教育在线--高考志愿填报](https://gkcx.eol.cn/)
 2. [百度新闻网](http://news.baidu.com/)
+3. [中国人民共和国教育部官网--全国高等学校名单](http://www.moe.gov.cn/jyb_xxgk/zdgk_sxml/sxml_gdjy/gdjy_gxsz/gxsz_xxmd/)
 
 ## 计划（暂定）
 
