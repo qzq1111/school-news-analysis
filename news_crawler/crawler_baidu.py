@@ -1,5 +1,4 @@
 import random
-import re
 import urllib.parse
 import urllib.request
 
@@ -23,7 +22,9 @@ class BaiDuNewsCrawler(object):
         :return:
         """
         headers = {
-            'Host': 'www.baidu.com',
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            'Host': 'news.baidu.com',
+
         }
         ua = random.choice(self.__ua_list)
         headers.update({"User-Agent": ua})
@@ -35,10 +36,9 @@ class BaiDuNewsCrawler(object):
         :return:
         """
         url_query_parse = {
-
-            "tn": "newstitledy",
-            "word": self.key_word,
-            "pn": (page-1) * 20,
+            "tn": "newstitle",
+            "word": "title:({})".format(self.key_word),
+            "pn": (page - 1) * 20,
             "rn": 20,
             "ie": 'utf-8',
             'bt': 0,
@@ -69,11 +69,10 @@ class BaiDuNewsCrawler(object):
         print(url)
         req = urllib.request.Request(url=url, headers=headers, method='GET')
         txt = urllib.request.urlopen(req).read().decode('utf-8')
-        txt = re.sub(r"\s{2,}", ' ', txt)
-        print(txt)
+        return txt
 
 
 if __name__ == '__main__':
     news = BaiDuNewsCrawler("上海大学")
-
-    news.start()
+    data = news.start()
+    print(data)
