@@ -1,12 +1,15 @@
+"""
+用于html清洗
+"""
 import re
 
 
-class DataParse(object):
+class HtmlClean(object):
 
     def __init__(self, html_string):
         self._data = html_string
 
-    def html_clean(self):
+    def clean(self):
         """
         数据清洗，删除html script/style
         :return:
@@ -24,8 +27,10 @@ class DataParse(object):
             if end_index == -1:
                 break
             self._data = self._data[:start_index] + self._data[end_index + len('</script>'):]
+        # 处理多余的titlelast
+        self._data = re.sub(r'\s*?titlelast', '', self._data, flags=re.I)
 
-    def html_zip(self, ):
+    def zip(self, ):
         """
         # html压缩
         :return:
@@ -40,9 +45,9 @@ class DataParse(object):
 if __name__ == '__main__':
     with open('examples_html/original.html', 'r', encoding='utf-8') as f:
         data = f.read()
-        data_parse = DataParse(data)
-        data_parse.html_clean()
-        # data_parse.html_zip()
+        data_parse = HtmlClean(data)
+        data_parse.clean()
+        # data_parse.zip()
 
     with open('examples_html/clean.html', 'w+', encoding='utf-8') as f:
         f.write(data_parse.data)
