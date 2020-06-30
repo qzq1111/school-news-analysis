@@ -9,12 +9,18 @@ class BaiDuNewsCrawler(object):
     """
     # 请求头地址
     __ua_list = [
-        'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'
+        'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko',
         'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
     ]
 
-    def __init__(self, key_word):
+    def __init__(self, key_word, stop_page=-1):
+        """
+
+        :param key_word: 抓取的关键字
+        :param stop_page: 停止抓取的页数，如果为-1,则抓取全部数据
+        """
         self.key_word = key_word
+        self.stop_page = stop_page
 
     def get_headers(self):
         """
@@ -58,6 +64,18 @@ class BaiDuNewsCrawler(object):
         url_query_parse = self.__set_query_string_parameters(page)
         url = 'https://news.baidu.com/ns?{}'.format(url_query_parse)
         return url
+
+    def check_stop_page(self, page):
+        """
+        判断是否设置停止抓取的页数
+        :return:
+        """
+        if self.stop_page == -1:
+            return True
+        elif self.stop_page < page:
+            return False
+        else:
+            return True
 
     def start(self):
         """
