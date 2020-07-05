@@ -5,6 +5,9 @@ import time
 import urllib.parse
 import urllib.request
 
+from news_crawler.baidu.html_parse import HtmlParse
+from news_crawler.mongo_utils import MongoDB
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 logger = logging.getLogger(__name__)
@@ -20,21 +23,23 @@ class BaiDuNewsCrawler(object):
         'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
     ]
 
+    html_parse = HtmlParse
+
     def __init__(self, key_word, start_page=1, stop_page=-1):
         """
-
         :param key_word: 抓取的关键字
         :param start_page: 起始页
         :param stop_page: 停止抓取的页数，如果为-1,则抓取全部数据
         """
         self.key_word = key_word
-
         if stop_page != -1 and start_page > stop_page:
             raise ValueError('开始页不能大于停止页')
         self.start_page = start_page
         self.stop_page = stop_page
         # 当前页
         self.__current_page = start_page
+        # 连接mongodb
+        self.mongo = MongoDB()
 
     def get_headers(self):
         """
@@ -79,7 +84,7 @@ class BaiDuNewsCrawler(object):
         url = 'https://news.baidu.com/ns?{}'.format(url_query_parse)
         return url
 
-    def check_stop_page(self):
+    def __check_stop_page(self):
         """
         判断是否设置停止抓取的页数
         :return:
@@ -91,7 +96,8 @@ class BaiDuNewsCrawler(object):
         else:
             return True
 
-    def check_next_page(self, page_data):
+    @staticmethod
+    def __check_next_page(page_data):
         """
         判断是否还有下一页
         :return:
@@ -111,14 +117,17 @@ class BaiDuNewsCrawler(object):
 
         while 1:
             url = self.get_url()
-            logger.info(url)
             try:
                 logger.info('开始抓取第{}页.....'.format(self.__current_page))
+                logger.info('抓取地址:{}'.format(url))
                 req = urllib.request.Request(url=url, headers=headers, method='GET')
                 html = urllib.request.urlopen(req).read().decode('utf-8')
-                # TODO:存储
+                # TODO:暂时不分离处理数据，处理之后写入mongodb
+                logger.info('第{}页数据处理中.....'.format(self.__current_page))
+                parse = self.html_parse(html_string=html, key=self.key_word)
+                self.mongo.write_news(parse.start())
                 # 判断是否为停止页，或者是否全部抓取完成
-                if self.check_stop_page() or not self.check_next_page(html):
+                if self.__check_stop_page() or not self.__check_next_page(html):
                     logger.info('数据全部抓取完成，共抓取{}页'.format(self.__current_page))
                     break
             except Exception as e:

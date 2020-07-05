@@ -8,8 +8,14 @@ from datetime import datetime, timedelta
 
 class HtmlParse(object):
 
-    def __init__(self, html_string: str):
+    def __init__(self, html_string: str, key: str):
+        """
+
+        :param html_string:html字符串
+        :param key: 关键字
+        """
         self._data = html_string
+        self.key = key
         self.__clean()
 
     def __clean(self):
@@ -50,7 +56,7 @@ class HtmlParse(object):
                     now = datetime.now() - timedelta(minutes=int(minute))
                 else:
                     now = datetime.now()
-                return now.strftime('%Y年%m月%d日 %H:%M:%S')
+                return now.strftime('%Y年%m月%d日 %H:%M')
 
             elif '小时前' in time_string:
                 hour = re.search(r'\d+', time_string)
@@ -59,7 +65,7 @@ class HtmlParse(object):
                     now = datetime.now() - timedelta(hours=int(hour))
                 else:
                     now = datetime.now()
-                return now.strftime('%Y年%m月%d日 %H:%M:%S')
+                return now.strftime('%Y年%m月%d日 %H:%M')
             else:
                 return time_string
 
@@ -102,6 +108,7 @@ class HtmlParse(object):
         news_data = []
         for news in news_list:
             temp = {
+                "news_key": self.key,
                 "news_title": '',
                 'news_link': '',
                 'news_author': '',
@@ -145,5 +152,5 @@ class HtmlParse(object):
 if __name__ == '__main__':
     with open('examples_html/original.html', 'r', encoding='utf-8') as f:
         data = f.read()
-        data_parse = HtmlParse(data)
+        data_parse = HtmlParse(data, '北京大学')
         print(data_parse.start())
