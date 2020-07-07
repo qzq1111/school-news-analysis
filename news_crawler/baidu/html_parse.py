@@ -56,7 +56,7 @@ class HtmlParse(object):
                     now = datetime.now() - timedelta(minutes=int(minute))
                 else:
                     now = datetime.now()
-                return now.strftime('%Y年%m月%d日 %H:%M')
+                return now.strftime('%Y-%m-%d')
 
             elif '小时前' in time_string:
                 hour = re.search(r'\d+', time_string)
@@ -65,9 +65,14 @@ class HtmlParse(object):
                     now = datetime.now() - timedelta(hours=int(hour))
                 else:
                     now = datetime.now()
-                return now.strftime('%Y年%m月%d日 %H:%M')
+                return now.strftime('%Y-%m-%d')
             else:
-                return time_string
+                try:
+                    parse_time = datetime.strptime(time_string, '%Y年%m月%d日 %H:%M')
+                    return parse_time.strftime('%Y-%m-%d')
+                except Exception as e:
+                    now = datetime.now()
+                    return now.strftime('%Y-%m-%d')
 
     def parse_news_list(self):
         """

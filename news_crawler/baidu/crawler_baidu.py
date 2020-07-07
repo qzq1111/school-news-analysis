@@ -121,7 +121,7 @@ class BaiDuNewsCrawler(object):
                 logger.info('开始抓取第{}页.....'.format(self.__current_page))
                 logger.info('抓取地址:{}'.format(url))
                 req = urllib.request.Request(url=url, headers=headers, method='GET')
-                html = urllib.request.urlopen(req).read().decode('utf-8')
+                html = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
                 # TODO:暂时不分离处理数据，处理之后写入mongodb
                 logger.info('第{}页数据处理中.....'.format(self.__current_page))
                 parse = self.html_parse(html_string=html, key=self.key_word)
@@ -139,5 +139,5 @@ class BaiDuNewsCrawler(object):
 
 
 if __name__ == '__main__':
-    news = BaiDuNewsCrawler("北京大学", start_page=1, stop_page=5)
+    news = BaiDuNewsCrawler("清华大学", start_page=1, stop_page=10)
     news.start()
