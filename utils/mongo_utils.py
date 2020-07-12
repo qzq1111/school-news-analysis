@@ -4,7 +4,7 @@ import pymongo
 class MongoDB(object):
 
     def __init__(self):
-        mongo_uri = 'mongodb://%s:%s@%s:%s/%s' % ("qzq1111", 'qzq1111', "118.24.0.241", "27017", "school_news_analysis")
+        mongo_uri = 'mongodb://%s:%s@%s:%s/%s' % ("qzq1111", 'qzq1111', "localhost", "27017", "school_news_analysis")
         self.conn = pymongo.MongoClient(mongo_uri)
         self.db = self.conn.school_news_analysis
 
