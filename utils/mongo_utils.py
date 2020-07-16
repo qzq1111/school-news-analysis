@@ -19,3 +19,13 @@ class MongoDB(object):
         for item in news:
             insert_data.append(pymongo.ReplaceOne({'news_link': item['news_link']}, item, upsert=True))
         school_news.bulk_write(insert_data)
+
+    def write_school_info(self, school):
+        """
+        写入学校信息到数据库，去重写入
+        :param school:
+        :return:
+        """
+        school_info = self.db.school_info
+        insert_data = [pymongo.ReplaceOne({'school_code': school['school_code']}, school, upsert=True)]
+        school_info.bulk_write(insert_data)

@@ -1,4 +1,3 @@
-import logging
 import random
 import re
 import time
@@ -6,11 +5,8 @@ import urllib.parse
 import urllib.request
 
 from news_crawler.baidu.html_parse import HtmlParse
-from news_crawler.mongo_utils import MongoDB
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-logger = logging.getLogger(__name__)
+from utils.logger import logger
+from utils.mongo_utils import MongoDB
 
 
 class BaiDuNewsCrawler(object):
@@ -136,8 +132,9 @@ class BaiDuNewsCrawler(object):
             # 更新当前页
             self.__current_page += 1
             time.sleep(2)
+        self.mongo.conn.close()
 
 
 if __name__ == '__main__':
-    news = BaiDuNewsCrawler("清华大学", start_page=1, stop_page=10)
+    news = BaiDuNewsCrawler("北京大学", start_page=1, stop_page=10)
     news.start()
