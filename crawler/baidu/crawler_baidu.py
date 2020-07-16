@@ -4,7 +4,7 @@ import time
 import urllib.parse
 import urllib.request
 
-from news_crawler.baidu.html_parse import HtmlParse
+from crawler.baidu.html_parse import HtmlParse
 from utils.logger import logger
 from utils.mongo_utils import MongoDB
 
