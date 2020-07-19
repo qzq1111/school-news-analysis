@@ -2,14 +2,32 @@
     <div class="container">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">高校新闻分析</a>
+                <a class="navbar-brand" href="/">高校新闻分析</a>
             </div>
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="高校名称">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>
+            <ul class="nav navbar-nav">
+                <li id="index">
+                    <a href="/">首页</a>
+                </li>
+                <li id="crawler">
+                    <a href="/crawler">爬虫</a>
+                </li>
+                <li id="analysis">
+                    <a href="/analysis">分析 </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
+<script type="text/javascript">
+    var path = window.location.pathname;
+    $("#index").removeAttr("class", "active");
+    $("#crawler").removeAttr("class", "active");
+    $("#analysis").removeAttr("class", "active");
+    if (path === '/') {
+        $("#index").attr("class", "active")
+    } else if (path === '/crawler') {
+        $("#crawler").attr("class", "active")
+    } else if (path === '/analysis') {
+        $("#analysis").attr("class", "active")
+    }
+</script>

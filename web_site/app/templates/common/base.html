@@ -11,20 +11,19 @@
         <script src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap-paginator.min.js') }}"></script>
+
     {% endblock %}
-    <style type="text/css">
-        em {
-            font-style: normal;
-            color: #c00;
-        }
-    </style>
 </head>
 <body>
 {% include "common/header.html" %}
+<div class="container">
+    {% block content %}<!--自定义模板区域-->
+    {% endblock %}
 
-{% block content %}<!--自定义模板区域-->
+</div>
+{% block footer_js %}
 {% endblock %}
+
 {% include "common/footer.html" %}<!--引入网页的底部模板-->
 
 
