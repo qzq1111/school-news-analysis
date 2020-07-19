@@ -23,17 +23,25 @@ def crawler():
         return "1"
 
 
-@index_bp.route('/analysis', methods=["GET"])
+@index_bp.route('/analysis', methods=["GET", "POST"])
 def analysis():
     """
     抓取
     :return:
     """
+    if request.method == 'GET':
 
-    return render_template('analysis_index.html')
+        return render_template('analysis_index.html')
+    elif request.method == 'POST':
+        data = request.form.get("school_name")
+        if data:
+            return school_analysis(data)
+        else:
+            return render_template('analysis_index.html')
+    else:
+        return render_template('analysis_index.html')
 
 
-@index_bp.route('/crawler/<school>', methods=['GET'])
 def school_crawler(school):
     """
 
@@ -43,7 +51,6 @@ def school_crawler(school):
     return "1"
 
 
-@index_bp.route('/analysis/<school>', methods=['GET'])
 def school_analysis(school):
     """
       获取学校分析情况
@@ -56,6 +63,7 @@ def school_analysis(school):
     school_info = mongo.db.school_info.find_one({'name': school}, {"_id": 0, })
 
     # ------------------------- 查询新闻 ------------------------#
+    # 按照时间统计新闻数据
     time_count_data = mongo.db.school_news.aggregate(
         [{"$match": {"news_key": school}},
          {"$group": {"_id": {"news_time": '$news_time'}, 'count': {"$sum": 1}}},
@@ -69,6 +77,7 @@ def school_analysis(school):
         news_data_count.append(item['count'])
         news_data_time.append(item['news_time'])
 
+    # 新闻按照发布者统计
     news_author_count = mongo.db.school_news.aggregate(
         [
             {"$match": {"news_key": school}},
@@ -79,14 +88,14 @@ def school_analysis(school):
 
         ]
     )
-    # news_data = mongo.db.school_news.find({"news_key": '清华大学'},
-    #                                       {"_id": 0, "news_title": 1, "news_author": 1, "news_time": 1, "news_link": 1}
-    #                                       ).sort([("news_time", -1)]).limit(20)
-    # data_count = mongo.db.school_news.find({"news_key": '清华大学'},
-    #                                        {"_id": 0, "news_title": 1, "news_author": 1, "news_time": 1, "news_link": 1}
-    #                                        ).count()
+    # 新闻总数统计
+    data_count = mongo.db.school_news.find({"news_key": school},
+                                           {"_id": 0, "news_title": 1, }
+                                           ).count()
+
     return render_template('school.html', news_data_count=news_data_count,
                            news_data_time=news_data_time,
                            news_author_count=list(news_author_count),
-                           school_info=school_info
+                           school_info=school_info,
+                           data_count=data_count
                            )

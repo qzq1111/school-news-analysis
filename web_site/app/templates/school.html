@@ -1,11 +1,18 @@
 {% extends "common/base.html" %}
 {% block content %}
     <div class="row">
-        <div class="media">
+        <p><a href="{{ url_for('index.analysis') }}">返回搜索</a></p>
+    </div>
+
+    <div class="row">
+        <div class="media" style="margin-top: 10px">
             <div class="media-body">
-                <h2 class="media-heading">{{ school_info.name }}
-                    <span>{{ school_info.province_name }}{{ school_info.city_name }}</span>
-                </h2>
+                <div class="page-header">
+                    <h2 class="media-heading">{{ school_info.name }}
+                        <small style="font-size: x-small">
+                            {{ school_info.province_name }}{{ school_info.city_name }}</small>
+                    </h2>
+                </div>
                 <p style="margin-top: 10px">
                     <span class="label label-info">{{ school_info.school_type_name }}</span>
                     <span class="label label-info">{{ school_info.school_nature_name }}</span>
@@ -37,12 +44,6 @@
                         </span>
                 </p>
                 <p>
-                    <span>博士点：<strong>{{ school_info.num_doctor }}</strong>&nbsp;&nbsp;</span>
-                    <span>硕士点：<strong>{{ school_info.num_master }}</strong>&nbsp;&nbsp;</span>
-                    <span>国家重点学科：<strong>{{ school_info.num_subject }}</strong>&nbsp;&nbsp;</span>
-                    <span>重点实验室：<strong>{{ school_info.num_lab }}</strong>&nbsp;&nbsp;</span>
-                </p>
-                <p>
                     <span>创建时间：{{ school_info.create_date }}&nbsp;&nbsp;</span>
                     <span>占地面积(亩)：{{ school_info.area }}&nbsp;&nbsp;</span>
                 </p>
@@ -56,8 +57,8 @@
                      height="200px">
             </div>
         </div>
-
     </div>
+
     <div class="modal fade" id="school_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -70,6 +71,75 @@
                     {{ school_info.content_detail|safe }}
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>博士点：<strong>{{ school_info.num_doctor }}</strong>&nbsp;&nbsp;</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>硕士点：<strong>{{ school_info.num_master }}</strong>&nbsp;&nbsp;</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>国家重点学科：<strong>{{ school_info.num_subject }}</strong>&nbsp;&nbsp;</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>重点实验室：<strong>{{ school_info.num_lab }}</strong>&nbsp;&nbsp;</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>采集新闻数：<strong>{{ data_count }}</strong></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>采集学校访周问量：<strong>{{ school_info.view_week }}</strong></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>采集学校访月问量：<strong>{{ school_info.view_month }}</strong></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span>采集学校访总问量：<strong>{{ school_info.view_total_number }}</strong></span>
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="row">
@@ -164,55 +234,51 @@
         </script>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            {#                <h2>全时间段各大新闻媒体占比</h2>#}
-            <div id="news_author" style="width:auto;height:400px;"></div>
-            <script type="text/javascript">
-                var data =
-                {{ news_author_count|tojson  }}
 
-                var myChart = echarts.init(document.getElementById('news_author'));
-                myChart.setOption(
-                    {
-                        title: {
-                            text: '前10名媒体占比',
-                            left: 'center'
-                        },
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: '{a} <br/>{b} : {c} ({d}%)'
-                        },
-                        legend: {
-                            type: 'scroll',
-                            orient: 'vertical',
-                            right: 10,
-                            top: 20,
-                            bottom: 20,
-                        },
+        {#                <h2>全时间段各大新闻媒体占比</h2>#}
+        <div id="news_author" style="width:auto;height:400px;"></div>
+        <script type="text/javascript">
+            var data =
+            {{ news_author_count|tojson  }}
 
-                        series: [
-                            {
-                                name: '',
-                                type: 'pie',
-                                radius: '55%',
-                                center: ['40%', '50%'],
-                                data: data,
-                                emphasis: {
-                                    itemStyle: {
-                                        shadowBlur: 10,
-                                        shadowOffsetX: 0,
-                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                    }
+            var myChart = echarts.init(document.getElementById('news_author'));
+            myChart.setOption(
+                {
+                    title: {
+                        text: '前10名媒体占比',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b} : {c} ({d}%)'
+                    },
+                    legend: {
+                        type: 'scroll',
+                        orient: 'vertical',
+                        right: 10,
+                        top: 20,
+                        bottom: 20,
+                    },
+
+                    series: [
+                        {
+                            name: '',
+                            type: 'pie',
+                            radius: '55%',
+                            center: ['40%', '50%'],
+                            data: data,
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
                                 }
                             }
-                        ]
-                    }
-                );
-            </script>
-        </div>
-        <div class="col-md-6">
-            <h2>最近一个月的热点新闻</h2>
-        </div>
+                        }
+                    ]
+                }
+            );
+        </script>
 
     </div>
 {% endblock %}

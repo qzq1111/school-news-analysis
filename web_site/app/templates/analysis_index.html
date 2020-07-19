@@ -1,11 +1,19 @@
 {% extends "common/base.html" %}
 {% block content %}
     <div class="row">
-        <h2>分析记录</h2>
-        <h2>热点分析</h2>
-    </div>
-{% endblock %}
-{% block footer_js %}
+        <h2>高校分析报告</h2>
+        <div class="col-md-6">
+            <form action="{{ url_for('index.analysis') }}" method="post" class="form-inline">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="school_name" placeholder="高校名称">
+                </div>
+                <button class="btn btn-default">查看</button>
+            </form>
 
+        </div>
+    </div>
+    <div class="row">
+        <h2>热点高校</h2>
+    </div>
 
 {% endblock %}
