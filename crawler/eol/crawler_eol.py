@@ -197,7 +197,7 @@ class CrawlerEol(object):
 
         )
 
-        self.mongo.write_school_info(data)
+        self.mongo.write_school_info([data])
         self.mongo.conn.close()
 
 
